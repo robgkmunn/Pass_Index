@@ -145,25 +145,26 @@ temp = temp(2:end);
 for i=1:numel(props)
     eval(['[' temp ']=ind2sub(size(map),props(i).PixelIdxList);']);
 end
-props = props(~cellfun(@(x)any(x(:)==1)||...
-    eval([repmat('any(',[1 size(pos,2)]) 'x==repmat(size(map),[size(x,1) 1])' repmat(')',[1 size(pos,2)])]),...
-    {props.PixelList}));
-temp = cellfun(@(x)[',y(:,' num2str(x) ')'],num2cell(1:size(pos,2)),'UniformOutput',false);
-temp = [temp{:}];
-for i=1:numel(props)
-   x = props(i).PixelList;
-   pixelselect = false(size(occupancy));
-   for j=1:size(x,2)
-       y = x;
-       y(:,j) = y(:,j)+1;
-       eval(['pixelselect(sub2ind(size(occupancy)' temp '))=true;']);
-       y(:,j) = y(:,j)-2;
-       eval(['pixelselect(sub2ind(size(occupancy)' temp '))=true;']);       
-   end
-   y = x;
-   eval(['pixelselect(sub2ind(size(occupancy)' temp '))=false;']);;
-   map(props(i).PixelIdxList) = nanmean(map(pixelselect));
-end
+
+% props = props(~cellfun(@(x)any(x(:)==1)||...
+%     eval([repmat('any(',[1 size(pos,2)]) 'x==repmat(size(map),[size(x,1) 1])' repmat(')',[1 size(pos,2)])]),...
+%     {props.PixelList}));
+% temp = cellfun(@(x)[',y(:,' num2str(x) ')'],num2cell(1:size(pos,2)),'UniformOutput',false);
+% temp = [temp{:}];
+% for i=1:numel(props)
+%    x = props(i).PixelList;
+%    pixelselect = false(size(occupancy));
+%    for j=1:size(x,2)
+%        y = x;
+%        y(:,j) = y(:,j)+1;
+%        eval(['pixelselect(sub2ind(size(occupancy)' temp '))=true;']);
+%        y(:,j) = y(:,j)-2;
+%        eval(['pixelselect(sub2ind(size(occupancy)' temp '))=true;']);       
+%    end
+%    y = x;
+%    eval(['pixelselect(sub2ind(size(occupancy)' temp '))=false;']);;
+%    map(props(i).PixelIdxList) = nanmean(map(pixelselect));
+% end
 
 %% Make gaussian kernel & smooth
 sigma = smth_width/binside/2;
